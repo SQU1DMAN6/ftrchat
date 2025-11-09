@@ -1,3 +1,14 @@
-{{define "content"}}
+{{define "content"}} {{template "something". }}
 <h1>Welcome to the Backend/Index</h1>
+
+{{.Message}} {{template "something". }} {{template "style". }} {{template
+"price". }} {{end}} {{define "something"}}
+<h1>This is something</h1>
+{{end}} {{define "style"}}
+<style>
+    * {
+        background-color: #00f;
+        color: white;
+    }
+</style>
 {{end}}

@@ -11,10 +11,5 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		Title:   "Base",
 		Message: "This is a new beginning! Hello from Index",
 	}
-
 	viewbackend.Frontend_Home(w, p)
-
-	///w.Write([]byte("this is inside internal/module/index/controller.go/Index"))
-
-	// http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

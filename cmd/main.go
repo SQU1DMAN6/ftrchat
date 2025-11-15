@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/SQU1DMAN6/ftrchat/internal/boot"
+	boot "github.com/SQU1DMAN6/ftrchat/app"
 )
 
 func main() {

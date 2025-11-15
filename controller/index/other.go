@@ -3,7 +3,7 @@ package index
 import (
 	"net/http"
 
-	viewbackend "github.com/SQU1DMAN6/ftrchat/html/view/backend"
+	viewbackend "github.com/SQU1DMAN6/ftrchat/view/connector/backend"
 )
 
 func Other(w http.ResponseWriter, r *http.Request) {

@@ -13,6 +13,9 @@ func RegisterRoutes(r chi.Router) {
 	r.Get("/hello", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello route welcome"))
 	})
+	r.Get("/quan", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello route localhost:6769/quan welcome"))
+	})
 	r.Get("/", index.Index)
 	r.Get("/other", index.Other)
 	r.Get("/ftr", something.Whatever)

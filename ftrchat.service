@@ -1,0 +1,10 @@
+[Unit]
+Description=FtR Project
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+WorkingDirectory=/www/wwwroot/ftr.quanthai.net/ftrchat
+ExecStart=/www/wwwroot/ftr.quanthai.net/ftrchat/bin/ftrchat
+[Install]
+WantedBy=multi-user.target

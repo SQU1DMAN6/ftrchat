@@ -25,3 +25,14 @@ func ParseBackEnd(files ...string) *template.Template {
 	return template.Must(
 		template.New("").Funcs(Funcs).ParseFS(filesystem, allFiles...))
 }
+
+func ParseBackEndLogin(files ...string) *template.Template {
+	allFiles := append(
+		[]string{
+			"themes/backend/layout/baselogin.html", //==> the template will have the name "base_pure.html"
+
+		},
+		files...)
+	return template.Must(
+		template.New("").Funcs(Funcs).ParseFS(filesystem, allFiles...))
+}

@@ -4,7 +4,7 @@ dev:
 	go run cmd/main.go
 # === Build and Run ===
 build:
-	@go build -o bin/ftrchat -buildvcs=false ./cmd/web
+	@go build -o bin/ftrchat -buildvcs=false ./web
 
 run: build
 	@./bin/ftrchat

@@ -12,5 +12,5 @@ func BootApp() {
 	RegisterMiddlewares(r)
 	routes.RegisterRoutes(r)
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":6769", r)
 }

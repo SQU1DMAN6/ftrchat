@@ -1,4 +1,4 @@
-.PHONY: dev buildrun
+.PHONY: dev build run
 
 dev:
 	go run cmd/main.go

@@ -5,7 +5,9 @@ import (
 
 	"github.com/SQU1DMAN6/ftrchat/controller/index"
 	"github.com/SQU1DMAN6/ftrchat/controller/login"
+	"github.com/SQU1DMAN6/ftrchat/controller/register"
 	"github.com/SQU1DMAN6/ftrchat/controller/something"
+	"github.com/SQU1DMAN6/ftrchat/controller/success"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -22,4 +24,7 @@ func RegisterRoutes(r chi.Router) {
 	r.Get("/ftr", something.Whatever)
 	r.Get("/login", login.LoginMain)
 	r.Post("/login", login.LoginMainPost)
+	r.Get("/register", register.RegisterMain)
+	r.Post("/register", register.RegisterMainPost)
+	r.Get("/success", success.SuccessRegister)
 }

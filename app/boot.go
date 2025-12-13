@@ -10,9 +10,13 @@ import (
 
 func BootApp() {
 	r := chi.NewRouter()
+	config.ConnectDatabase()
+	config.SayHelloToSession() // rename this
+
+	r.Use(config.GetSessionManager().LoadAndSave)
+
 	RegisterMiddlewares(r)
 	routes.RegisterRoutes(r)
-	config.ConnectDatabase()
 
 	http.ListenAndServe(":6769", r)
 }

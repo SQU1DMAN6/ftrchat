@@ -12,4 +12,5 @@ type FrontEndParams struct {
 	CSRFToken     template.HTML
 	Pagination    map[string]interface{}
 	Authenticated bool
+	Error         map[string]string
 }

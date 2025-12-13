@@ -2,6 +2,7 @@ package model_user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/uptrace/bun"
@@ -15,32 +16,48 @@ type User struct {
 	Password string `bun:",notnull"`
 }
 
-func ModelUser(db *bun.DB) {
+func ModelUser(db *bun.DB) error {
 	ctx := context.Background()
-	db.NewCreateTable().Model((*User)(nil)).Exec(ctx)
-	// Create table
-	_, err := db.NewCreateTable().Model((*User)(nil)).IfNotExists().Exec(ctx)
-	if err != nil {
-		fmt.Println("Error creating table:", err)
-		return
-	}
+	_, err := db.NewCreateTable().
+		Model((*User)(nil)).
+		IfNotExists().
+		Exec(ctx)
+
+	return err
 }
 
-func GetUser(id int, db *bun.DB) (err error, user *User) {
+func GetUser(id int, db *bun.DB) (*User, error) {
+	var userModel User
 	ctx := context.Background()
-	err = db.NewSelect().
-		Model(&user).
+	err := db.NewSelect().
+		Model(&userModel).
 		Where("id = ?", id).
 		Scan(ctx)
 
 	if err != nil {
 		fmt.Println("Error querying user:", err)
-		return err, nil
+		return nil, err
 	}
 
-	fmt.Printf("User: %+v\n", user)
+	fmt.Printf("User: %+v\n", userModel)
 
-	return nil, user
+	return &userModel, nil
+}
+
+func GetUserByEmail(email string, db *bun.DB) (*User, error) {
+	var user User
+	ctx := context.Background()
+
+	err := db.NewSelect().
+		Model(&user).
+		Where("email = ?", email).
+		Scan(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func CreateUser(db *bun.DB, name string, email string, password string) {
@@ -51,6 +68,24 @@ func CreateUser(db *bun.DB, name string, email string, password string) {
 }
 
 func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	return string(bytes), err
+}
+
+func CheckPassword(db *bun.DB, email, plainTextPassword string) (*User, error) {
+	usr, err := GetUserByEmail(email, db)
+	if err != nil {
+		return nil, err
+	}
+	if err := bcrypt.CompareHashAndPassword(
+		[]byte(usr.Password),
+		[]byte(plainTextPassword),
+	); err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return nil, err
+		}
+		return nil, err
+	}
+	return usr, nil
+
 }

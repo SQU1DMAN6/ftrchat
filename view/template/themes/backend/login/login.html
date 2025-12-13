@@ -3,12 +3,28 @@
 
 {{template "alert" .}}
 
+{{.Title}}
+{{.Message}}
+
+{{if .Error}}
+    <div class="alert-danger">
+        {{range $key, $msg := .Error}}
+            <p>{{$msg}}</p>
+        {{end}}
+    </div>
+{{end}}
+
 <form action="/login" method="post">
     <input type="text" name="auth_email" placeholder="Email">
     <input type="password" name="auth_password" placeholder="Password">
     <button type="submit">Login</button>
 </form>
+<style>
+    .alert-danger{
+        color: red;
+        font-size: 4rem;
+    }
 
-<h1> login page </h1>
+</style>
 
 {{end}}

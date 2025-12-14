@@ -11,7 +11,7 @@ import (
 func BootApp() {
 	r := chi.NewRouter()
 	config.ConnectDatabase()
-	config.SayHelloToSession() // rename this
+	config.SayHelloToSession()
 
 	r.Use(config.GetSessionManager().LoadAndSave)
 

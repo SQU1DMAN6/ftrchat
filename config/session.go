@@ -15,11 +15,11 @@ func SayHelloToSession() {
 	sessionManager.Cookie.Name = "session_id"
 	sessionManager.Cookie.HttpOnly = true
 	sessionManager.Cookie.Persist = true
-	sessionManager.Cookie.SameSite = http.SameSiteStrictMode
+	sessionManager.Cookie.Path = "/"
+	sessionManager.Cookie.SameSite = http.SameSiteLaxMode
 	sessionManager.Cookie.Secure = false
-	sessionManager.Cookie.Partitioned = true
 }
 
-func GetSessionManager()*scs.SessionManager{
+func GetSessionManager() *scs.SessionManager {
 	return sessionManager
 }

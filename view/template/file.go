@@ -8,4 +8,5 @@ var (
 	LoginMain        = ParseBackEndLogin("themes/backend/login/login.html", "themes/backend/login/alert.html")
 	RegisterMain     = ParseBackEndLogin("themes/backend/register/register.html", "themes/backend/register/alert.html")
 	SuccessRegister  = ParseBackEndLogin("themes/backend/success/successRegister.html")
+	ChatMainHTML     = ParseBackEnd("themes/backend/chat/index.html")
 )

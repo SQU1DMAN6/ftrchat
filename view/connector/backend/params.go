@@ -4,6 +4,7 @@ import "html/template"
 
 type FrontEndParams struct {
 	Title         string
+	Name          string
 	Message       string
 	UserData      interface{}
 	SessionData   map[string]string

@@ -54,19 +54,19 @@ func LoginMainPost(w http.ResponseWriter, r *http.Request) {
 			Error:   make(map[string]string),
 		}
 
-		paramData.Error["general"] = "Something wrong, your turn your turn your turn your turn your turn..."
+		paramData.Error["general"] = fmt.Sprintf("Encountered an error trying to log in: %s", err)
 		viewbackend.LoginMain(w, paramData)
 		return
-
 	}
 
-	fmt.Println(user)
+	fmt.Printf("\nUser: %v | ID: %v | Email: %v\n", user.Name, user.ID, user.Email)
 
-	SS := config.GetSessionManager()	
+	SS := config.GetSessionManager()
 
-	SS.Put(r.Context(), "message", "Hello from a session!")
-	SS.Put(r.Context(), "userEmail", userEmail)
-	SS.Put(r.Context(), "isLogged", true)
+	SS.Put(r.Context(), "message", "Hello, fellow people with ding-a-lings!")
+	SS.Put(r.Context(), "userEmail", user.Email)
+	SS.Put(r.Context(), "name", user.Name)
+	SS.Put(r.Context(), "isLoggedIn", true)
 
 	// Setting the session with the user data
 	// Redirect

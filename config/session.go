@@ -17,7 +17,7 @@ func SayHelloToSession() {
 	sessionManager.Cookie.Persist = true
 	sessionManager.Cookie.Path = "/"
 	sessionManager.Cookie.SameSite = http.SameSiteLaxMode
-	sessionManager.Cookie.Secure = false
+	sessionManager.Cookie.Secure = true
 }
 
 func GetSessionManager() *scs.SessionManager {

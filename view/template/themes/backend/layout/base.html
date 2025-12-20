@@ -1,13 +1,29 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Backend Index</title>
-    </head>
-    <body>
-        <h1>This is in the base layout</h1>
-        {{block "content" .}}
-        <p>Cannot render the content block</p>
-        {{end}}
-        <p>Bottom page</p>
-    </body>
+
+<head>
+    <title>FtR Index</title>
+</head>
+
+<body>
+    <h1>The FtR Project</h1>
+    {{block "content" .}}
+    <p>Cannot render the content block</p>
+    {{end}}
+    <p>© 2025 Quan Thai</p>
+</body>
+<style>
+    :root {
+        --primary: #2d518d;
+        --secondary: #142540;
+        --light-secondary: #10317f;
+        --grey: #4c4c4c;
+        --dark: #222222;
+        --light-blue: #488ecc;
+        --light-light-blue: #53acda;
+        --light: #eaeff4;
+        --dark-light: #cdcdcd;
+    }
+</style>
+
 </html>

@@ -7,5 +7,5 @@ import (
 )
 
 func Frontend_ChatMain(w io.Writer, p FrontEndParams) error {
-	return template.ChatMainHTML.ExecuteTemplate(w, "base.html", p)
+	return template.ChatMainHTML.ExecuteTemplate(w, "basechat.html", p)
 }

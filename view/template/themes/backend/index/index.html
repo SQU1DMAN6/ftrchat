@@ -1,19 +1,18 @@
 {{define "content"}} {{template "something". }}
-<h1>Welcome to the Backend/Index</h1>
+<h1>You are in the Backend</h1>
 
-{{.Message}} {{template "something". }} {{template "style". }} {{template
-"price". }} {{end}} {{define "something"}}
-
+{{.Message}}
+{{template "something". }}
+{{template "style". }}
+{{template "redirect". }}
+{{end}}
+{{define "something"}}
 
 {{if .Authenticated}}
 <p> You are logged in </p>
 {{else}}
 <p> You are not logged in yet</p>
-{{end}}
-
-<h1>This is something</h1>
-<p>hello updated</p>
-{{end}} {{define "style"}}
+{{end}} {{end}} {{define "style"}}
 <style>
     * {
         background-color: #00f;

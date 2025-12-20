@@ -12,23 +12,24 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	paramData := viewbackend.FrontEndParams{
-		Title:   "Base",
-		Message: "This is a new beginning! Hello from Index",
+		Title: "Base",
 	}
 
 	SS := config.GetSessionManager()
 
 	msg := SS.GetString(r.Context(), "message")
-	isLogged := SS.GetBool(r.Context(), "isLogged")
+	isLoggedIn := SS.GetBool(r.Context(), "isLoggedIn")
 	userEmail := SS.GetString(r.Context(), "userEmail")
-	// io.WriteString(w, msg)
+	userName := SS.GetString(r.Context(), "name")
 
-	fmt.Println("msg", msg)
-	fmt.Println("userEmail", userEmail)
+	fmt.Println("Message (From Index): ", msg)
+	fmt.Println("userEmail (From Index): ", userEmail)
+	fmt.Println("User Name (From Index): ", userName)
 
-	paramData.Authenticated = isLogged
+	paramData.Authenticated = isLoggedIn
+	paramData.Message = fmt.Sprintf("Welcome, %s, to the FtR Project.", userName)
 
-	if isLogged != true {
+	if isLoggedIn != true {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 

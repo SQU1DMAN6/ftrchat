@@ -17,7 +17,7 @@ func ChatMain(w http.ResponseWriter, r *http.Request) {
 	SS := config.GetSessionManager()
 
 	msg := SS.GetString(r.Context(), "message")
-	isLoggedIn := SS.GetBool(r.Context(), "isLogged")
+	isLoggedIn := SS.GetBool(r.Context(), "isLoggedIn")
 	userEmail := SS.GetString(r.Context(), "userEmail")
 
 	fmt.Println("msg", msg)

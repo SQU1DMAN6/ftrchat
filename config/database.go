@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	model_user "github.com/SQU1DMAN6/ftrchat/model"
+	"github.com/SQU1DMAN6/ftrchat/model"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
@@ -25,7 +25,7 @@ func ConnectDatabase() {
 	fmt.Println("Database connected, Quan can cook.")
 	db = bun.NewDB(sqldb, sqlitedialect.New())
 
-	model_user.ModelUser(db)
+	model.ModelUser(db)
 }
 
 func GetDB() *bun.DB {

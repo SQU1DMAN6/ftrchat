@@ -1,4 +1,4 @@
-package model_user
+package model
 
 import (
 	"context"

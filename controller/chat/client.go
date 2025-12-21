@@ -32,18 +32,17 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		// origin := r.Header.Get("Origin")
-		// // Allow your specific domains
-		// // allowedOrigins := []string{
-		// // 	"https://ftr.quanthai.net",
-		// // 	"http://localhost:6769", // for local development
-		// // }
-		// // for _, allowed := range allowedOrigins {
-		// // 	if origin == allowed {
-		// // 		return true
-		// // 	}
-		// // }sss
-		return true
+		origin := r.Header.Get("Origin")
+		allowedOrigins := []string{
+			"https://ftr.quanthai.net",
+			"http://localhost:6769",
+		}
+		for _, allowed := range allowedOrigins {
+			if origin == allowed {
+				return true
+			}
+		}
+		return false
 	},
 }
 

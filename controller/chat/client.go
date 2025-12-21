@@ -43,7 +43,7 @@ var upgrader = websocket.Upgrader{
 		// // 		return true
 		// // 	}
 		// // }sss
-		return false
+		return true
 	},
 }
 

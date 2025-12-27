@@ -3,17 +3,16 @@ package template
 import (
 	"embed"
 	"html/template"
-	"sync"
 )
 
 //go:embed themes/backend/*/*.html
 var filesystem embed.FS
 
-var (
-	cachedTemplate *template.Template
-	once           sync.Once
-	devMode        = true // Set to true during development
-)
+// var (
+// 	cachedTemplate *template.Template
+// 	once           sync.Once
+// 	devMode        = true // Set to true during development
+// )
 
 func ParseBackEnd(files ...string) *template.Template {
 	allFiles := append(
@@ -41,6 +40,16 @@ func ParseBackEndChat(files ...string) *template.Template {
 	allFiles := append(
 		[]string{
 			"themes/backend/chat/basechat.html",
+		},
+		files...)
+	return template.Must(
+		template.New("").Funcs(Funcs).ParseFS(filesystem, allFiles...))
+}
+
+func ParseBackEndBlog(files ...string) *template.Template {
+	allFiles := append(
+		[]string{
+			"themes/backend/blog/baseblog.html",
 		},
 		files...)
 	return template.Must(

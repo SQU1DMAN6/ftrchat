@@ -1,0 +1,20 @@
+{{define "content"}}
+{{.Title}}
+<br>
+{{.Message}}
+
+{{if .Error}}
+    <div class="alert-danger">
+        {{range $key, $msg := .Error}}
+            <p>{{$msg}}</p>
+        {{end}}
+    </div>
+{{end}}
+<style>
+    .alert-danger {
+        color: red;
+        font-size: 2rem;
+        background-color: white;
+    }
+</style>
+{{end}}

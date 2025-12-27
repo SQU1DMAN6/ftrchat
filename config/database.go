@@ -14,7 +14,6 @@ import (
 var db *bun.DB
 
 func ConnectDatabase() {
-	// Open database
 	sqldb, err := sql.Open(sqliteshim.ShimName, "file:database.db?cache=shared&mode=rwc")
 	if err != nil {
 		panic(err)
@@ -26,6 +25,7 @@ func ConnectDatabase() {
 	db = bun.NewDB(sqldb, sqlitedialect.New())
 
 	model.ModelUser(db)
+	model.ModelBlogPost(db)
 }
 
 func GetDB() *bun.DB {

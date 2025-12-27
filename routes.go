@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	"github.com/SQU1DMAN6/ftrchat/controller/blog"
 	"github.com/SQU1DMAN6/ftrchat/controller/chat"
 	"github.com/SQU1DMAN6/ftrchat/controller/index"
 	"github.com/SQU1DMAN6/ftrchat/controller/login"
@@ -28,6 +29,9 @@ func RegisterRoutes(r chi.Router) {
 	r.Get("/register", register.RegisterMain)
 	r.Post("/register", register.RegisterMainPost)
 	r.Get("/success", success.SuccessRegister)
+	r.Get("/newblog", blog.BlogNewBlog)
+	r.Get("/blog", blog.BlogListBlogs)
+	r.Post("/newblog", blog.BlogNewBlogPost)
 
 	hub := chat.NewHub()
 	go hub.Run()

@@ -10,10 +10,11 @@ import (
 )
 
 type User struct {
-	ID       int64  `bun:",pk,autoincrement,notnull"`
-	Name     string `bun:",notnull"`
-	Email    string `bun:",notnull"`
-	Password string `bun:",notnull"`
+	ID       int64      `bun:",pk,autoincrement,notnull"`
+	Name     string     `bun:",notnull"`
+	Email    string     `bun:",notnull"`
+	Password string     `bun:",notnull"`
+	Posts    []BlogPost `bun:"rel:has-many,join:id=user_id"`
 }
 
 func ModelUser(db *bun.DB) error {
@@ -51,6 +52,23 @@ func GetUserByEmail(email string, db *bun.DB) (*User, error) {
 	err := db.NewSelect().
 		Model(&user).
 		Where("email = ?", email).
+		Scan(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func GetUserByName(username string, db *bun.DB) (*User, error) {
+	var user User
+
+	ctx := context.Background()
+
+	err := db.NewSelect().
+		Model(&user).
+		Where("name = ?", username).
 		Scan(ctx)
 
 	if err != nil {

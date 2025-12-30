@@ -50,6 +50,7 @@ func GetBlogPost(id int, db *bun.DB) (*BlogPost, error) {
 		Where("id = ?", id).
 		Scan(ctx)
 
+		//SELECT * from BlogPost where id = id
 	if err != nil {
 		fmt.Println("Error querying blog post:", err)
 		return nil, err

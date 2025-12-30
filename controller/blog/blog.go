@@ -60,11 +60,7 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := r.ParseForm
-	if err != nil {
-		http.Error(w, "ParseForm() error", http.StatusBadRequest)
-		return
-	}
+	_ = r.ParseForm
 
 	SS := config.GetSessionManager()
 	db := config.GetDB()

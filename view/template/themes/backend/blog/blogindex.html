@@ -3,6 +3,8 @@
 <br>
 {{.Message}}
 
+<a href="/newblog"><button class="redirect">Write a new post</button></a>
+
 {{if .Error}}
     <div class="alert-danger">
         {{range $key, $msg := .Error}}

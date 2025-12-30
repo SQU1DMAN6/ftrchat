@@ -11,4 +11,5 @@ var (
 	ChatMainHTML     = ParseBackEndChat("themes/backend/chat/index.html")
 	BlogNewBlog      = ParseBackEndBlog("themes/backend/blog/newblog.html")
 	BlogListBlogs    = ParseBackEndBlog("themes/backend/blog/blogindex.html")
+	BlogViewBlog     = ParseBackEndBlog("themes/backend/blog/viewblog.html")
 )

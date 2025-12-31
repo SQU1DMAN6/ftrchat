@@ -73,3 +73,29 @@ func NewBlogPost(db *bun.DB, title string, category string, timestamp int64, use
 
 	return nil
 }
+
+func ListBlogPosts(db *bun.DB) ([]BlogPost, error) {
+	// var blogPostModel BlogPost
+	// ctx := context.Background()
+	// err := db.NewSelect().
+	// 	Model(&blogPostModel).
+	// 	Limit(10).
+	// 	Scan(ctx)
+
+	// Select multiple users <----
+	ctx := context.Background()
+	var posts []BlogPost
+	err := db.NewSelect().
+		Model(&posts).
+		Where("category = ?", "GENERAL").
+		Limit(10).
+		Scan(ctx)
+
+		//SELECT * from BlogPost limit 10 orderby id asc
+	if err != nil {
+		fmt.Println("Error querying blog post:", err)
+		return nil, err
+	}
+
+	return posts, nil
+}

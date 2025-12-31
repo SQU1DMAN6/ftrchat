@@ -39,6 +39,15 @@ func BlogListBlogs(w http.ResponseWriter, r *http.Request) {
 	}
 
 	SS := config.GetSessionManager()
+	db := config.GetDB()
+
+	blogPosts, err := model.ListBlogPosts(db)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get blog post listing: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	paramData.UserData = blogPosts
 
 	msg := SS.GetString(r.Context(), "message")
 	isLoggedIn := SS.GetBool(r.Context(), "isLoggedIn")

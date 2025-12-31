@@ -1,6 +1,8 @@
 package viewbackend
 
-import "html/template"
+import (
+	"html/template"
+)
 
 type FrontEndParams struct {
 	Title         string
@@ -14,4 +16,5 @@ type FrontEndParams struct {
 	Pagination    map[string]interface{}
 	Authenticated bool
 	Error         map[string]string
+	SafeBody      template.HTML
 }

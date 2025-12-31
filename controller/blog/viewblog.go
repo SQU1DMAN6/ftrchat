@@ -2,8 +2,10 @@ package blog
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/SQU1DMAN6/ftrchat/config"
 	"github.com/SQU1DMAN6/ftrchat/model"
@@ -28,8 +30,6 @@ func BlogViewBlog(w http.ResponseWriter, r *http.Request) {
 
 	userName := SS.GetString(r.Context(), "name")
 
-	// html to view the blog
-
 	postID := chi.URLParam(r, "pid")
 	postIDInt, err := strconv.ParseInt(postID, 10, 64)
 
@@ -47,10 +47,11 @@ func BlogViewBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	blogContentsCooked := strings.ReplaceAll(blogPostModel.Contents, "\n", "<br style='line-height: 1'>")
+
 	paramData := viewbackend.FrontEndParams{
 		Title:    blogPostModel.Title,
-		Message:  blogPostModel.Contents,
-		SafeBody: "<b> hello strong html tg </b> <h1> this is h1 </h1>",
+		SafeBody: template.HTML(blogContentsCooked),
 	}
 
 	viewbackend.Frontend_BlogView(w, paramData)

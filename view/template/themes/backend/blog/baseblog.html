@@ -13,14 +13,10 @@
     </body>
     <style>
         body {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            width: 100vw;
             align-items: center;
             justify-content: center;
-            overflow: auto;
-            scrollbar-width: thin;
+            display: flex;
             background-color: blue;
         }
 
@@ -30,13 +26,14 @@
             background-color: #dfdfdf;
             border: 1px solid black;
             padding: 100px;
-            margin: 200px;
+            margin: 400px;
             max-width: calc(100% - 30px);
-            max-height: calc(100% - 20px);
             align-items: center;
             justify-content: center;
             display: flex;
             flex-direction: column;
+            margin-top: 0;
+            margin-bottom: 0;
         }
 
         button {
@@ -55,6 +52,23 @@
         button.redirect:hover {
             background-color: #aaa;
             box-shadow: 0 0 5 5 white;
+        }
+
+        ::-webkit-scrollbar {
+            height: 0px;              /* height of horizontal scrollbar ← You're missing this */
+            width: 10px;               /* width of vertical scrollbar */
+            border: 1px solid #d5d5d5;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            border-radius: 6px;
+            background: #eeeeee;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 6px;
+            background: #a0a0a0;
         }
     </style>
 </html>

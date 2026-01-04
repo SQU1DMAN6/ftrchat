@@ -2,13 +2,16 @@ package blog
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/SQU1DMAN6/ftrchat/config"
 	"github.com/SQU1DMAN6/ftrchat/model"
 	viewbackend "github.com/SQU1DMAN6/ftrchat/view/connector/backend"
+	"github.com/go-chi/chi/v5"
 )
 
 func BlogNewBlog(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +44,23 @@ func BlogListBlogs(w http.ResponseWriter, r *http.Request) {
 	SS := config.GetSessionManager()
 	db := config.GetDB()
 
-	blogPosts, err := model.ListBlogPosts(db)
+	pageID := chi.URLParam(r, "pid")
+	if pageID == "" {
+		http.Redirect(w, r, "/blog/1", http.StatusSeeOther)
+		return
+	}
+	pageIDInt, err := strconv.ParseInt(pageID, 10, 64)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to parse page ID: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	blogPosts, err := model.ListBlogPostsWithPagination(db, int(pageIDInt))
+
+	fmt.Println("================================")
+	fmt.Println(blogPosts)
+	fmt.Println("================================")
+
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get blog post listing: %s", err), http.StatusInternalServerError)
 		return
@@ -94,5 +113,61 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 
 	timestamp := time.Now().Unix()
 
-	model.NewBlogPost(db, blogTitle, "GENERAL", timestamp, userID)
+	id, err := model.NewBlogPost(db, blogTitle, blogContents, "GENERAL", timestamp, userID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to create new post: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/view/%d", id), http.StatusSeeOther)
+}
+
+func BlogViewBlog(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	SS := config.GetSessionManager()
+	isLoggedIn := SS.GetBool(r.Context(), "isLoggedIn")
+
+	if isLoggedIn != true {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	}
+
+	db := config.GetDB()
+
+	userName := SS.GetString(r.Context(), "name")
+
+	postID := chi.URLParam(r, "pid")
+	postIDInt, err := strconv.ParseInt(postID, 10, 64)
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to parse post ID: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("User %s tried to access post %d\n", userName, postIDInt)
+
+	blogPostModel, err := model.GetBlogPost(int(postIDInt), db)
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to retrieve blog post: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	blogContentsCooked := strings.ReplaceAll(blogPostModel.Contents, "\n", "<br style='line-height: 1'>")
+
+	paramData := viewbackend.FrontEndParams{
+		Title:    blogPostModel.Title,
+		SafeBody: template.HTML(blogContentsCooked),
+	}
+
+	viewbackend.Frontend_BlogView(w, paramData)
+
+	// Use this id to query to article/post
+	//SELECT * FROM articles/blog WHERE ID = postId
+
+	// ctx := r.Context()
+	// key := ctx.Value("key").(string)
 }

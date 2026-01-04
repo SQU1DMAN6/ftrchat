@@ -30,8 +30,9 @@ func RegisterRoutes(r chi.Router) {
 	r.Post("/register", register.RegisterMainPost)
 	r.Get("/success", success.SuccessRegister)
 	r.Get("/newblog", blog.BlogNewBlog)
-	r.Get("/blog", blog.BlogListBlogs)
+	r.Get("/blog/{pid}", blog.BlogListBlogs)
 	r.Post("/newblog", blog.BlogNewBlogPost)
+	r.Get("/blog", blog.BlogListBlogs)
 	r.Get("/view/{pid}", blog.BlogViewBlog)
 
 	hub := chat.NewHub()

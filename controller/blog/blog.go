@@ -3,6 +3,7 @@ package blog
 import (
 	"fmt"
 	"html/template"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -49,17 +50,31 @@ func BlogListBlogs(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/blog/1", http.StatusSeeOther)
 		return
 	}
+
+	offset := 5
+
 	pageIDInt, err := strconv.ParseInt(pageID, 10, 64)
-	if err != nil {
+	if pageID != "next" && pageID != "previous" && err != nil {
 		http.Error(w, fmt.Sprintf("Failed to parse page ID: %s", err), http.StatusBadRequest)
 		return
 	}
 
-	blogPosts, err := model.ListBlogPostsWithPagination(db, int(pageIDInt))
+	blogPostsData, err := model.ListBlogPostsWithPagination(db, int(pageIDInt), offset)
 
+	blogPosts := blogPostsData.Posts
+	previousblogPosts := blogPostsData.PreviousPage
+	nextblogPosts := blogPostsData.NextPage
+	totalNumberOfPosts := blogPostsData.TotalPost
+
+	paramData.Pagination = make(map[string]interface{})
+	paramData.Pagination["Previous"] = previousblogPosts
+	paramData.Pagination["Next"] = nextblogPosts
+	paramData.Pagination["TotalPages"] = int(math.Ceil(float64(float64(totalNumberOfPosts) / float64(offset))))
 	fmt.Println("================================")
-	fmt.Println(blogPosts)
+	fmt.Println(blogPostsData)
 	fmt.Println("================================")
+	fmt.Println("Total number of posts:", totalNumberOfPosts)
+	fmt.Println("Total number of pages:", paramData.Pagination)
 
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get blog post listing: %s", err), http.StatusInternalServerError)
@@ -139,17 +154,18 @@ func BlogViewBlog(w http.ResponseWriter, r *http.Request) {
 
 	userName := SS.GetString(r.Context(), "name")
 
-	postID := chi.URLParam(r, "pid")
-	postIDInt, err := strconv.ParseInt(postID, 10, 64)
-
+	var postID int64
+	var err error
+	postIDString := chi.URLParam(r, "pid")
+	postID, err = strconv.ParseInt(postIDString, 10, 64)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to parse post ID: %s", err), http.StatusBadRequest)
 		return
 	}
 
-	fmt.Printf("User %s tried to access post %d\n", userName, postIDInt)
+	fmt.Printf("User %s tried to access post %d\n", userName, postID)
 
-	blogPostModel, err := model.GetBlogPost(int(postIDInt), db)
+	blogPostModel, err := model.GetBlogPost(int(postID), db)
 
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to retrieve blog post: %s", err), http.StatusBadRequest)

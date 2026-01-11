@@ -100,20 +100,60 @@ func ListBlogPosts(db *bun.DB) ([]BlogPost, error) {
 	return posts, nil
 }
 
-func ListBlogPostsWithPagination(db *bun.DB, paginationOffset int) ([]BlogPost, error) {
+// Get the blog post with pagination
+type BlogPostPagination struct {
+	Posts        []BlogPost
+	TotalPost    int
+	PreviousPage int
+	NextPage     int
+}
+
+func ListBlogPostsWithPagination(db *bun.DB, page int, limit int) (*BlogPostPagination, error) {
+	if page < 1 {
+		page = 1
+	}
+
 	ctx := context.Background()
+	offset := (page - 1) * limit
+
 	var posts []BlogPost
+
+	// 1️⃣ Fetch paginated posts
 	err := db.NewSelect().
 		Model(&posts).
 		Where("category = ?", "GENERAL").
 		Order("time_stamp DESC").
-		Limit(3).
-		Offset(paginationOffset).
+		Limit(limit).
+		Offset(offset).
 		Scan(ctx)
 	if err != nil {
-		fmt.Println("Error querying blog post:", err)
 		return nil, err
 	}
 
-	return posts, nil
+	// 2️⃣ Count total posts
+	total, err := db.NewSelect().
+		Model((*BlogPost)(nil)).
+		Where("category = ?", "GENERAL").
+		Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// 3️⃣ Compute pagination
+	var prevPage, nextPage int
+
+	if page > 1 {
+		prevPage = page - 1
+	}
+
+	if offset+len(posts) < total {
+		nextPage = page + 1
+	}
+
+	return &BlogPostPagination{
+		Posts:        posts,
+		TotalPost:    total,
+		PreviousPage: prevPage,
+		NextPage:     nextPage,
+	}, nil
 }

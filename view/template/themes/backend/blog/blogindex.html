@@ -19,19 +19,25 @@
     <div class="blogPost">
         <h1>{{ .Title | uppercase }}</h1>
         <br>
-        <p>{{ .Contents| truncate}}</p>
+        <p>{{ .Contents | truncate }}</p>
     </div>
 </a>
 {{end}}
 {{end}}
 
 <div class="pagination-selector">
-    <li><a class="pagination" href="/blog/previous">&laquo;</a></li>
-    <li><a class="pagination" href="/blog/1">1</a></li>
-    <li><a class="pagination" href="/blog/2">2</a></li>
-    <li><a class="pagination" href="/blog/3">3</a></li>
-    <li><a class="pagination" href="/blog/4">4</a></li>    
-    <li><a class="pagination" href="/blog/next">&raquo;</a></li>
+    {{ if .Pagination.Previous }}
+        <li><a class="pagination" href="/blog/{{ .Pagination.Previous }}">&laquo;</a></li>
+    {{ end }}
+    {{ if .Pagination.TotalPages }}
+        {{ range $i := .Pagination.TotalPages }}
+            <li><a class="pagination" href="/blog/{{ add $i 1 }}">{{ add $i 1 }}</a></li>
+        {{ end }}
+    {{ end }}
+    {{ if .Pagination.Next }}
+    	<li><a class="pagination" href="/blog/{{ .Pagination.Next }}">&raquo;</a></li>
+    {{ end }}
+
 </div>
 
 

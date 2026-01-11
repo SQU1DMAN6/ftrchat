@@ -8,6 +8,7 @@ import (
 var Funcs = template.FuncMap{
 	"uppercase": ToUpper,
 	"truncate":  Truncate,
+	"add":       Add,
 }
 
 func ToUpper(v string) string {
@@ -21,4 +22,8 @@ func Truncate(stringToTruncate string) string {
 	}
 
 	return stringToTruncate
+}
+
+func Add(first int, second int) int {
+	return first + second
 }

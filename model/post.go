@@ -22,14 +22,14 @@ import (
 // }
 
 type BlogPost struct {
-	ID        int64  `bun:",pk,autoincrement,notnull"`
-	Title     string `bun:",notnull"`
-	Slug      string `bun:",notnull"`
-	Contents  string `bun:",notnull"`
-	TimeStamp int64  `bun:",notnull"`
-	Category  string `bun:",notnull"`
-	UserID    int64  `bun:",notnull"`
-	User      *User  `bun:"rel:belongs-to,join:user_id=id"`
+	ID        int64         `bun:",pk,autoincrement,notnull"`
+	Title     string        `bun:",notnull"`
+	Slug      string        `bun:",notnull"`
+	Contents  string        `bun:",notnull"`
+	TimeStamp int64         `bun:",notnull"`
+	Category  *BlogCategory `bun:"rel:belongs-to"`
+	UserID    int64         `bun:",notnull"`
+	User      *User         `bun:"rel:belongs-to,join:user_id=id"`
 }
 
 func ModelBlogPost(db *bun.DB) error {
@@ -47,7 +47,9 @@ func GetBlogPost(id int, db *bun.DB) (*BlogPost, error) {
 	ctx := context.Background()
 	err := db.NewSelect().
 		Model(&blogPostModel).
-		Where("id = ?", id).
+		Relation("User").
+		Where("?TableAlias.id = ?", id).
+		// Where("id = ?", id).
 		Scan(ctx)
 
 		//SELECT * from BlogPost where id = id
@@ -61,7 +63,7 @@ func GetBlogPost(id int, db *bun.DB) (*BlogPost, error) {
 	return &blogPostModel, nil
 }
 
-func NewBlogPost(db *bun.DB, title string, contents string, category string, timestamp int64, userID int64) (blogID int64, err error) {
+func NewBlogPost(db *bun.DB, title string, contents string, category *BlogCategory, timestamp int64, userID int64) (blogID int64, err error) {
 	ctx := context.Background()
 	var ids []int64
 	userModel, err := GetUser(int(userID), db)
@@ -90,6 +92,7 @@ func ListBlogPosts(db *bun.DB) ([]BlogPost, error) {
 	var posts []BlogPost
 	err := db.NewSelect().
 		Model(&posts).
+		Relation("User").
 		Where("category = ?", "GENERAL").
 		Scan(ctx)
 	if err != nil {
@@ -118,9 +121,9 @@ func ListBlogPostsWithPagination(db *bun.DB, page int, limit int) (*BlogPostPagi
 
 	var posts []BlogPost
 
-	// 1️⃣ Fetch paginated posts
 	err := db.NewSelect().
 		Model(&posts).
+		Relation("User").
 		Where("category = ?", "GENERAL").
 		Order("time_stamp DESC").
 		Limit(limit).
@@ -129,8 +132,6 @@ func ListBlogPostsWithPagination(db *bun.DB, page int, limit int) (*BlogPostPagi
 	if err != nil {
 		return nil, err
 	}
-
-	// 2️⃣ Count total posts
 	total, err := db.NewSelect().
 		Model((*BlogPost)(nil)).
 		Where("category = ?", "GENERAL").
@@ -139,7 +140,6 @@ func ListBlogPostsWithPagination(db *bun.DB, page int, limit int) (*BlogPostPagi
 		return nil, err
 	}
 
-	// 3️⃣ Compute pagination
 	var prevPage, nextPage int
 
 	if page > 1 {

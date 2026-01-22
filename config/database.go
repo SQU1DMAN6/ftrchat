@@ -26,6 +26,7 @@ func ConnectDatabase() {
 
 	model.ModelUser(db)
 	model.ModelBlogPost(db)
+	model.ModelBlogCategory(db)
 }
 
 func GetDB() *bun.DB {

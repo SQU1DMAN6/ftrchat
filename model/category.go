@@ -10,9 +10,12 @@ import (
 )
 
 type BlogCategory struct {
-	ID   int64  `bun:",pk,autoincrement,notnull"`
-	Name string `bun:",notnull"`
-	Slug string `bun:",notnull"`
+	ID     int64      `bun:",pk,autoincrement,notnull"`
+	Name   string     `bun:",notnull"`
+	Slug   string     `bun:",notnull"`
+	UserID int64      `bun:",notnull"`
+	User   *User      `bun:"rel:belongs-to,join:user_id=id"`
+	Posts  []BlogPost `bun:"rel:has-many,join:id=user_id"`
 }
 
 func ModelBlogCategory(db *bun.DB) error {

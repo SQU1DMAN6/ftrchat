@@ -10,11 +10,12 @@ import (
 )
 
 type User struct {
-	ID       int64      `bun:",pk,autoincrement,notnull"`
-	Name     string     `bun:",notnull"`
-	Email    string     `bun:",notnull"`
-	Password string     `bun:",notnull"`
-	Posts    []BlogPost `bun:"rel:has-many,join:id=user_id"`
+	ID         int64          `bun:",pk,autoincrement,notnull"`
+	Name       string         `bun:",notnull"`
+	Email      string         `bun:",notnull"`
+	Password   string         `bun:",notnull"`
+	Posts      []BlogPost     `bun:"rel:has-many,join:id=user_id"`
+	Categories []BlogCategory `bun:"rel:has-many,join:id=user_id"`
 }
 
 func ModelUser(db *bun.DB) error {

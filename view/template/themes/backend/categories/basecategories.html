@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>FtR Blog Categories</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div class="main">
+            {{block "content" .}}
+            <p>Could not render the content block.</p>
+            {{end}}
+        </div>
+    </body>
+    <style>
+        body {
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            background-color: blue;
+        }
+
+        .main {
+            border-radius: 10px;
+            color: black;
+            background-color: #dfdfdf;
+            border: 1px solid black;
+            padding: 100px;
+            margin: 400px;
+            max-width: calc(100% - 30px);
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    </style>
+</html>

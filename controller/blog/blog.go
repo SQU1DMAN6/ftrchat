@@ -128,7 +128,11 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 
 	timestamp := time.Now().Unix()
 
-	id, err := model.NewBlogPost(db, blogTitle, blogContents, "GENERAL", timestamp, userID)
+	var category *model.BlogCategory
+
+	category = &model.BlogCategory{Name: "G", User: userModel, UserID: userModel.ID}
+
+	id, err := model.NewBlogPost(db, blogTitle, blogContents, category, timestamp, userID)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to create new post: %s", err), http.StatusInternalServerError)
 		return
@@ -167,6 +171,10 @@ func BlogViewBlog(w http.ResponseWriter, r *http.Request) {
 
 	blogPostModel, err := model.GetBlogPost(int(postID), db)
 
+	// fmt.Println("blogpost, hopefully with user info", blogPostModel)
+
+	// fmt.Println("blogpost, hopefully with user info, that is Name: ", blogPostModel.User.Name)
+
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to retrieve blog post: %s", err), http.StatusBadRequest)
 		return
@@ -176,6 +184,7 @@ func BlogViewBlog(w http.ResponseWriter, r *http.Request) {
 
 	paramData := viewbackend.FrontEndParams{
 		Title:    blogPostModel.Title,
+		Name:     blogPostModel.User.Name,
 		SafeBody: template.HTML(blogContentsCooked),
 	}
 

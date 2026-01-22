@@ -17,9 +17,10 @@
 {{ range .UserData }}
 <a href="/view/{{ .ID }}">
     <div class="blogPost">
-        <h1>{{ .Title | uppercase }}</h1>
+        <p class="blog-post-text">{{ .User.Name }}</p>
+        <h1 class="blog-post-text">{{ .Title | uppercase }}</h1>
         <br>
-        <p>{{ .Contents | truncate }}</p>
+        <p class="blog-post-text">{{ .Contents | truncate }}</p>
     </div>
 </a>
 {{end}}
@@ -83,15 +84,22 @@
         color: white;
         border: 1px solid white;
         border-radius: 6px;
-        margin: 4px;
-        padding: 5px;
+        margin: 10px;
+        padding: 20px;
         word-wrap: break-word;
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
         width: 70vw;
         text-decoration: none;
+    }
+
+    .blog-post-text {
+        margin: 2px;
+    }
+
+    h1.blog-post-text {
+        font-size: 20pt;
     }
 
     a {

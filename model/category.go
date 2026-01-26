@@ -58,9 +58,9 @@ func GetBlogCategoryByName(name string, db *bun.DB) (*BlogCategory, error) {
 	return &blogCategory, nil
 }
 
-func CreateBlogPostCategory(db *bun.DB, name string) {
+func CreateBlogPostCategory(db *bun.DB, name string, userModel *User, userID int64) {
 	ctx := context.Background()
 	slug := strings.ReplaceAll(name, " ", "-")
-	blogPostCategory := &BlogCategory{Name: name, Slug: slug}
+	blogPostCategory := &BlogCategory{Name: name, Slug: slug, User: userModel, UserID: userID}
 	db.NewInsert().Model(blogPostCategory).Exec(ctx)
 }

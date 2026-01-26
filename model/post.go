@@ -22,14 +22,14 @@ import (
 // }
 
 type BlogPost struct {
-	ID        int64         `bun:",pk,autoincrement,notnull"`
-	Title     string        `bun:",notnull"`
-	Slug      string        `bun:",notnull"`
-	Contents  string        `bun:",notnull"`
-	TimeStamp int64         `bun:",notnull"`
-	Category  *BlogCategory `bun:"rel:belongs-to"`
-	UserID    int64         `bun:",notnull"`
-	User      *User         `bun:"rel:belongs-to,join:user_id=id"`
+	ID        int64  `bun:",pk,autoincrement,notnull"`
+	Title     string `bun:",notnull"`
+	Slug      string `bun:",notnull"`
+	Contents  string `bun:",notnull"`
+	TimeStamp int64  `bun:",notnull"`
+	Category  int64  `bun:"rel:belongs-to,notnull"`
+	UserID    int64  `bun:",notnull"`
+	User      *User  `bun:"rel:belongs-to,join:user_id=id"`
 }
 
 func ModelBlogPost(db *bun.DB) error {
@@ -63,7 +63,7 @@ func GetBlogPost(id int, db *bun.DB) (*BlogPost, error) {
 	return &blogPostModel, nil
 }
 
-func NewBlogPost(db *bun.DB, title string, contents string, category *BlogCategory, timestamp int64, userID int64) (blogID int64, err error) {
+func NewBlogPost(db *bun.DB, title string, contents string, category int64, timestamp int64, userID int64) (blogID int64, err error) {
 	ctx := context.Background()
 	var ids []int64
 	userModel, err := GetUser(int(userID), db)
@@ -124,7 +124,6 @@ func ListBlogPostsWithPagination(db *bun.DB, page int, limit int) (*BlogPostPagi
 	err := db.NewSelect().
 		Model(&posts).
 		Relation("User").
-		Where("category = ?", "GENERAL").
 		Order("time_stamp DESC").
 		Limit(limit).
 		Offset(offset).

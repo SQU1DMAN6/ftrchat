@@ -1,0 +1,27 @@
+{{define "content"}}
+{{.Title}}
+<br>
+{{.Message}}
+
+{{if .Error}}
+    <div class="alert-danger">
+        {{range $key, $msg := .Error}}
+            <p>{{$msg}}</p>
+        {{end}}
+    </div>
+{{end}}
+
+<form action="/newblogcategory" method="post">
+    <input type="text" name="categoryName" placeholder="The name of your new category">
+    <br><br>
+    <button type="submit">Create new category</button>
+</form>
+<style>
+    .alert-danger {
+        color: red;
+        font-size: 2em;
+        background-color: white;
+    }
+</style>
+
+{{end}}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/SQU1DMAN6/ftrchat/controller/blog"
+	"github.com/SQU1DMAN6/ftrchat/controller/category"
 	"github.com/SQU1DMAN6/ftrchat/controller/chat"
 	"github.com/SQU1DMAN6/ftrchat/controller/index"
 	"github.com/SQU1DMAN6/ftrchat/controller/login"
@@ -34,6 +35,8 @@ func RegisterRoutes(r chi.Router) {
 	r.Post("/newblog", blog.BlogNewBlogPost)
 	r.Get("/blog", blog.BlogListBlogs)
 	r.Get("/view/{pid}", blog.BlogViewBlog)
+	r.Get("/blog/category/new", category.CategoryNewCategory)
+	r.Post("/newblogcategory", category.CategoryNewCategoryPost)
 
 	hub := chat.NewHub()
 	go hub.Run()

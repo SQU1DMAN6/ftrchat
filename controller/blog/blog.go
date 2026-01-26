@@ -117,6 +117,13 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 
 	blogTitle := strings.TrimSpace(r.FormValue("title"))
 	blogContents := strings.TrimSpace(r.FormValue("blogContents"))
+	blogCategoryRaw := r.FormValue("category")
+	blogCategory, err := strconv.ParseInt(blogCategoryRaw, 10, 0)
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to pass blog category as integer: %s", err), http.StatusBadRequest)
+		return
+	}
 
 	if blogTitle == "" || blogContents == "" {
 		http.Error(w, "Blog title and contents are required", http.StatusBadRequest)
@@ -128,11 +135,11 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 
 	timestamp := time.Now().Unix()
 
-	var category *model.BlogCategory
+	// var category *model.BlogCategory
 
-	category = &model.BlogCategory{Name: "G", User: userModel, UserID: userModel.ID}
+	// category = &model.BlogCategory{Name: "GENERAL", User: userModel, UserID: userModel.ID}
 
-	id, err := model.NewBlogPost(db, blogTitle, blogContents, category, timestamp, userID)
+	id, err := model.NewBlogPost(db, blogTitle, blogContents, blogCategory, timestamp, userID)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to create new post: %s", err), http.StatusInternalServerError)
 		return

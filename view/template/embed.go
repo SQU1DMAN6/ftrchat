@@ -55,3 +55,13 @@ func ParseBackEndBlog(files ...string) *template.Template {
 	return template.Must(
 		template.New("").Funcs(Funcs).ParseFS(filesystem, allFiles...))
 }
+
+func ParseBackEndBlogCategories(files ...string) *template.Template {
+	allFiles := append(
+		[]string{
+			"themes/backend/categories/basecategories.html",
+		},
+		files...)
+	return template.Must(
+		template.New("").Funcs(Funcs).ParseFS(filesystem, allFiles...))
+}

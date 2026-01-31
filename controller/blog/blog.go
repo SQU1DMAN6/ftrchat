@@ -61,6 +61,17 @@ func BlogListBlogs(w http.ResponseWriter, r *http.Request) {
 
 	blogPostsData, err := model.ListBlogPostsWithPagination(db, int(pageIDInt), offset)
 
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get blog post listing: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("==================")
+
+	fmt.Println("bloglog blog", blogPostsData)
+
+	fmt.Println("==================")
+
 	blogPosts := blogPostsData.Posts
 	previousblogPosts := blogPostsData.PreviousPage
 	nextblogPosts := blogPostsData.NextPage
@@ -75,11 +86,6 @@ func BlogListBlogs(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("================================")
 	fmt.Println("Total number of posts:", totalNumberOfPosts)
 	fmt.Println("Total number of pages:", paramData.Pagination)
-
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to get blog post listing: %s", err), http.StatusInternalServerError)
-		return
-	}
 
 	paramData.UserData = blogPosts
 
@@ -117,13 +123,13 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 
 	blogTitle := strings.TrimSpace(r.FormValue("title"))
 	blogContents := strings.TrimSpace(r.FormValue("blogContents"))
-	blogCategoryRaw := r.FormValue("category")
-	blogCategory, err := strconv.ParseInt(blogCategoryRaw, 10, 0)
+	// blogCategoryRaw := r.FormValue("category")
+	// blogCategory, err := strconv.ParseInt(blogCategoryRaw, 10, 0)
 
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to pass blog category as integer: %s", err), http.StatusBadRequest)
-		return
-	}
+	// if err != nil {
+	// 	http.Error(w, fmt.Sprintf("Failed to pass blog category as integer: %s", err), http.StatusBadRequest)
+	// 	return
+	// }
 
 	if blogTitle == "" || blogContents == "" {
 		http.Error(w, "Blog title and contents are required", http.StatusBadRequest)
@@ -139,7 +145,7 @@ func BlogNewBlogPost(w http.ResponseWriter, r *http.Request) {
 
 	// category = &model.BlogCategory{Name: "GENERAL", User: userModel, UserID: userModel.ID}
 
-	id, err := model.NewBlogPost(db, blogTitle, blogContents, blogCategory, timestamp, userID)
+	id, err := model.NewBlogPost(db, blogTitle, blogContents, 1, timestamp, userID)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to create new post: %s", err), http.StatusInternalServerError)
 		return

@@ -25,8 +25,8 @@ func ConnectDatabase() {
 	db = bun.NewDB(sqldb, sqlitedialect.New())
 
 	model.ModelUser(db)
-	model.ModelBlogPost(db)
 	model.ModelBlogCategory(db)
+	model.ModelBlogPost(db)
 }
 
 func GetDB() *bun.DB {
